@@ -7,27 +7,28 @@ oldKey = None
 
 # Loop around the data
 # It will be in the format key\tval
-# Where key is the store name, val is the sale amount
+# Where key is the type, val is the counters(airports) of that type
 #
 # All the airports for a particular type will be presented,
 # then the key will change and we'll be dealing with the next country
 
-for line in sys.stdin:
-    data_mapped = line.strip().split("\t")
+for line in sys.stdin:  # Reads the output given by the mapper script
+    data_mapped = line.strip().split("\t")  # Takes each line and puts it into the "data_mapped" array.
     if len(data_mapped) != 2:
         # Something has gone wrong. Skip this line.
         continue
 
-    thisAirport, thisType = data_mapped
+    thisType, thisID = data_mapped
+    # Puts the values of each line to corresponding variables.
 
-    if oldKey and oldKey != thisAirport:
+    if oldKey and oldKey != thisType:  # Checks if this is the first line of the data_mapped or any change of type
         print oldKey, "\t", airportTotal
-        oldKey = thisAirport;
-        airportTotal = 0
+        oldKey = thisType  # Sets the value of oldKey with the first type it encounters
+        airportTotal = 0  # Resets the count when there is a change
 
-    oldKey = thisAirport
-    airportTotal += int(thisType)
+    oldKey = thisType  # Type
+    airportTotal += int(thisID)  # Adds 1 to the count of airports for that type of airport
 
-if oldKey != None:
-    print oldKey, "\t", airportTotal
+if oldKey is not None:  # When reached EOF
+    print oldKey, "\t", airportTotal  # Prints the final set of values
 
